@@ -28,21 +28,24 @@ public class BController {
 		
 		command = new BListFCommand();
 		command.execute(model);
-		
-		
+			
 		return "list";
 	}
+	
+	
 	// 작성화면
-	@RequestMapping("write_view")
+	@RequestMapping("/write_view")
 	public String write_view(Model model){
 		
 		System.out.println("write_view()");
 	
+		
 		return "write_view";
 	
 	}
 	
 	@RequestMapping("/write")
+	
 	// 작성 글 DB 저장, write_view 요청을 request 객체로 받는다.
 	public String write(HttpServletRequest request, Model model){
 		 System.out.println("write()");
@@ -51,7 +54,7 @@ public class BController {
 		 
 		 command = new BWriteCommand();
 		 
-		 command.equals(model);
+		 command.execute(model);
 		 
 		 return "redirect:list"; // DB 저장 후, List 페이지로 이동
 		
@@ -61,6 +64,7 @@ public class BController {
 	@RequestMapping("content_view")
 	public String content_view(HttpServletRequest request, Model model){
 		System.out.println("content_view()");
+		
 		model.addAttribute("request",request);
 		command = new BContentCommand();
 		
