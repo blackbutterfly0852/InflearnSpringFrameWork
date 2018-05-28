@@ -7,14 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.javalec.InflearnSpring16_20_command.BCommand;
-import com.javalec.InflearnSpring16_20_command.BContentCommand;
-import com.javalec.InflearnSpring16_20_command.BDeleteCommand;
-import com.javalec.InflearnSpring16_20_command.BListFCommand;
-import com.javalec.InflearnSpring16_20_command.BModifyCommand;
-import com.javalec.InflearnSpring16_20_command.BReplyCommand;
-import com.javalec.InflearnSpring16_20_command.BReplyViewCommand;
-import com.javalec.InflearnSpring16_20_command.BWriteCommand;
+import com.javalec.InflearnSpring16_20.command.BCommand;
+import com.javalec.InflearnSpring16_20.command.BContentCommand;
+import com.javalec.InflearnSpring16_20.command.BDeleteCommand;
+import com.javalec.InflearnSpring16_20.command.BListFCommand;
+import com.javalec.InflearnSpring16_20.command.BModifyCommand;
+import com.javalec.InflearnSpring16_20.command.BReplyCommand;
+import com.javalec.InflearnSpring16_20.command.BReplyViewCommand;
+import com.javalec.InflearnSpring16_20.command.BWriteCommand;
 
 @Controller
 public class BController {
@@ -61,9 +61,9 @@ public class BController {
 	}
 	
 	// 글 상세보기
-	@RequestMapping("content_view")
+	@RequestMapping("/content_view")
 	public String content_view(HttpServletRequest request, Model model){
-		System.out.println("content_view()");
+		System.out.println("content_view() 들어옴");
 		
 		model.addAttribute("request",request);
 		command = new BContentCommand();
@@ -75,7 +75,7 @@ public class BController {
 	}
 	
 	// 글 수정
-	@RequestMapping(method = RequestMethod.POST, value = "/modifty" ) // 수정 요청은 포스트 방식으로 전달
+	@RequestMapping(method = RequestMethod.POST, value = "/modify" ) // 수정 요청은 포스트 방식으로 전달
 	public String modify(HttpServletRequest request, Model model){
 		model.addAttribute("request",request);
 		
@@ -83,6 +83,21 @@ public class BController {
 		command.execute(model);
 		
 		return "redirect:list"; // 글 수정후, List 페이지로 이동
+	}
+	
+	//삭제
+	@RequestMapping("/delete")
+	public String delete(HttpServletRequest request, Model model){
+		
+		System.out.println("delete()");
+		
+		model.addAttribute("request",request);
+		
+		command = new BDeleteCommand();
+		
+		command.execute(model);
+		
+		return "redirect:list";
 	}
 	
 	// 답글 보기
@@ -114,18 +129,6 @@ public class BController {
 		
 	}
 	
-	//삭제
-	@RequestMapping("/delete")
-	public String delete(HttpServletRequest request, Model model){
-		
-		System.out.println("delete()");
-		
-		model.addAttribute("request",request);
-		
-		command = new BDeleteCommand();
-		
-		command.execute(model);
-		
-		return "redirect:list";
-	}
+	
+	
 }

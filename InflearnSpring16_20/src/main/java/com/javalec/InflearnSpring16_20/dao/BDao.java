@@ -100,8 +100,8 @@ public class BDao {
 		
 		try {
 			connection = dataSource.getConnection();
-			String query ="insert into mvc_board(bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent)"
-							+ " values (mvc_board_seq.nextval, ? , ? , ? , 0 , mvc_board_seq.currval , 0 , 0)";
+			String query ="insert into mvc_board(bId, bName, bTitle, bContent,bDate, bHit, bGroup, bStep, bIndent)"
+							+ " values (mvc_board_seq.nextval, ? , ? , ?,sysdate , 0 , mvc_board_seq.currval , 0 , 0)";
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1,bName);
 			preparedStatement.setString(2,bTitle);
@@ -132,9 +132,9 @@ public class BDao {
 	}
 	//3. 글보기
 	public BDto contentView(String strID){
-		
+		System.out.println("글번호 " + strID);
 		upHit(strID); // 조회수
-		ArrayList<BDto> dtos = new ArrayList<BDto>();
+		//ArrayList<BDto> dtos = new ArrayList<BDto>();
 		BDto dto = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -159,14 +159,14 @@ public class BDao {
 			String bTitle = resultSet.getString("bTitle");
 			String bContent = resultSet.getString("bContent");
 			Timestamp bDate = resultSet.getTimestamp("bDate");
-		int bHit = resultSet.getInt("bHit");
-		int bGroup = resultSet.getInt("bGroup");
-		int bStep = resultSet.getInt("bStep");
-		int bIndent = resultSet.getInt("bIndent");
+			int bHit = resultSet.getInt("bHit");
+			int bGroup = resultSet.getInt("bGroup");
+			int bStep = resultSet.getInt("bStep");
+			int bIndent = resultSet.getInt("bIndent");
 		
 		dto = new BDto(bId, bName, bTitle, bContent, bDate, bHit, bGroup, bStep, bIndent);
 		
-		dtos.add(dto);			
+			
 			
 		}
 		
@@ -185,11 +185,11 @@ public class BDao {
 				e2.printStackTrace();
 			}
 		}
-		return null;
+		return dto;
 		
 	}
 	
-	// 3. 글보기 관련 조회수 메소드
+	// 3-1. 글보기 관련 조회수 메소드
 	private void upHit( String bId) {
 		// TODO Auto-generated method stub
 		
@@ -218,6 +218,71 @@ public class BDao {
 		}
 	}
 	
+	//4. 글 수정
+	public void modify(String bId, String bName, String bTitle, String bContent){
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		
+		
+		try{
+			connection = dataSource.getConnection();
+			String query = "update mvc_board set bName = ?, bTitle =?, bDate = sysdate, bContent =? where bId = ?";
+			
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, bName);
+			preparedStatement.setString(2, bTitle);
+			preparedStatement.setString(3, bContent);
+			preparedStatement.setInt(4, Integer.parseInt(bId));
+			int rn = preparedStatement.executeUpdate();
+			
+			System.out.println("4. 글 수정 업데이트 개수 : " +  rn);
+			
+			
+			
+		}catch(Exception e){
+			
+		}finally{
+			try {
+				if(preparedStatement != null) preparedStatement.close();
+				if(connection != null) connection.close();
+			} catch (Exception e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
+			}
+		}
+		
+	}
 	
+	// 글 삭제
+	public void delete(String bId){
+		
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		
+		
+		try{
+			connection = dataSource.getConnection();
+			String query ="delete from mvc_board where bId =?";
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, Integer.parseInt(bId));
+			
+			int rn = preparedStatement.executeUpdate();
+			
+			System.out.println("삭제된 로우수 : " +  rn);
+			
+		}catch(Exception e){
+			
+		}finally{
+			// 항상자원해제
+			try {
+				if(preparedStatement != null) preparedStatement.close();
+				if(connection != null) connection.close();
+			} catch (Exception e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
+			}
+		}
+		
+	}
 
 }
