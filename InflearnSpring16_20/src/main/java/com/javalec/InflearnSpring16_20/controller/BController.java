@@ -103,17 +103,20 @@ public class BController {
 	// 답글 보기
 	@RequestMapping("/reply_view")
 	public String reply_view(HttpServletRequest request, Model model){
+		
+		//request 객체 : content_view의 ID값이 넘어온다.
 		System.out.println("reply_view()");
 		
 		model.addAttribute("request",request);
 		
 		command = new BReplyViewCommand();
 		
+		command.execute(model);
+		
 		return "reply_view";
 	}
 	
 	// 답글 쓰기
-	
 	@RequestMapping("/reply")
 	public String reply(HttpServletRequest request, Model model){
 		System.out.println("reply()");
