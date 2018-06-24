@@ -2,10 +2,14 @@ package com.javalec.InflearnSpring16_20.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+
 
 import com.javalec.InflearnSpring16_20.command.BCommand;
 import com.javalec.InflearnSpring16_20.command.BContentCommand;
@@ -15,12 +19,22 @@ import com.javalec.InflearnSpring16_20.command.BModifyCommand;
 import com.javalec.InflearnSpring16_20.command.BReplyCommand;
 import com.javalec.InflearnSpring16_20.command.BReplyViewCommand;
 import com.javalec.InflearnSpring16_20.command.BWriteCommand;
+import com.javalec.InflearnSpring16_20.util.Constant;
 
 @Controller
 public class BController {
 
 	BCommand command;
+	private JdbcTemplate template;
 	
+	
+    @Autowired // template 객체가 생성될 때, dataSource(DB접속정보) 같이 생성.
+	public void setTemplate(JdbcTemplate template) {
+		this.template = template;
+		Constant.template = this.template;
+	}
+
+
 	// 글 리스트 
 	@RequestMapping("/list")
 	public String list(Model model){

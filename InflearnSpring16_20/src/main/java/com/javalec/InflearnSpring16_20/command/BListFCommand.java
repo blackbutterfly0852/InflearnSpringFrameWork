@@ -16,6 +16,8 @@ public class BListFCommand implements BCommand {
 		
 		ArrayList<BDto> dtos = dao.list();
 		
+		System.out.println("dtos : " + dtos);
+		
 		model.addAttribute("list", dtos);
 		
 

@@ -21,8 +21,19 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.javalec.InflearnSpring16_20" />
+	<context:component-scan base-package="com.javalec.InflearnSpring16_20"/>
 	
+	<beans:bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<beans:property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<beans:property name="username" value="bigdata" />
+		<beans:property name="password" value="bigdata" />
+	</beans:bean>
 	
+	<!-- dataSource Bean을 template Bean에 넣는다. -->
+	<beans:bean name ="template" class = "org.springframework.jdbc.core.JdbcTemplate">
+	<beans:property name ="dataSource" ref = "dataSource">
+	</beans:property>
+	</beans:bean>
 	
 </beans:beans>
